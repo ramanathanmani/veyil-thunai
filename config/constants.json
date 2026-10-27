@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "note": "Physical constants and system thresholds for Veyil Thunai",
+    "source": "Architecture Section 5 and 6",
+    "verified": false
+  },
+  "constants": {
+    "WIND_10M_TO_2M": {
+      "value": 0.6,
+      "unit": "ratio",
+      "source": "Architecture Sec 6.1 (standard micrometeorology logarithmic profile approximation for 10m to 2m conversion)",
+      "verified": false
+    },
+    "DEFAULT_PRESSURE_HPA": {
+      "value": 1005.0,
+      "unit": "hPa",
+      "source": "Architecture Sec 5 (typical coastal/inland Tamil Nadu sea level surface pressure)",
+      "verified": false
+    },
+    "STALE_FORECAST_HOURS": {
+      "value": 6,
+      "unit": "hours",
+      "source": "Architecture Sec 5 design rule for staleness warning",
+      "verified": false
+    },
+    "SAMPLE_FALLBACK_HOURS": {
+      "value": 24,
+      "unit": "hours",
+      "source": "Architecture Sec 13.1 T-F-02 fallback rule",
+      "verified": false
+    },
+    "COOLING_BREAK_INTERVAL_MINUTES": {
+      "value": 90,
+      "unit": "minutes",
+      "source": "NDMA July 2025 Heatwave Advisory for gig workers",
+      "verified": false
+    },
+    "COOLING_BREAK_DURATION_MINUTES": {
+      "value": 15,
+      "unit": "minutes",
+      "source": "NDMA July 2025 Heatwave Advisory for gig workers",
+      "verified": false
+    },
+    "EMERGENCY_NUMBER_NATIONAL": {
+      "value": "112",
+      "source": "National Emergency Response Support System (ERSS), Government of India",
+      "verified": true
+    },
+    "EMERGENCY_NUMBER_AMBULANCE_TN": {
+      "value": "108",
+      "source": "Tamil Nadu 108 Emergency Ambulance Service",
+      "verified": true
+    },
+    "OPEN_METEO_BASE_URL": {
+      "value": "https://api.open-meteo.com/v1/forecast",
+      "source": "Open-Meteo API documentation (non-commercial use)",
+      "verified": true
+    },
+    "DEFAULT_TIMEZONE": {
+      "value": "Asia/Kolkata",
+      "source": "Indian Standard Time (IST)",
+      "verified": true
+    }
+  }
+}

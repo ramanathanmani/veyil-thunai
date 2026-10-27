@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "note": "Job presets with default workload classes. Worker can override.",
+    "source": "Architecture Section 6.5 design assumptions to validate with real workers",
+    "verified": false
+  },
+  "presets": [
+    {
+      "id": "delivery_moto",
+      "icon": "Bike",
+      "nameKey": "preset.delivery_moto",
+      "defaultWorkload": "light",
+      "notes": "Sun exposure on the road; helmet",
+      "source": "Architecture Sec 6.5 design assumption",
+      "verified": false
+    },
+    {
+      "id": "delivery_cycle",
+      "icon": "Bicycle",
+      "nameKey": "preset.delivery_cycle",
+      "defaultWorkload": "heavy",
+      "notes": "Continuous pedaling in outdoor heat",
+      "source": "Architecture Sec 6.5 design assumption",
+      "verified": false
+    },
+    {
+      "id": "construction",
+      "icon": "HardHat",
+      "nameKey": "preset.construction",
+      "defaultWorkload": "heavy",
+      "notes": "Heavy physical work in direct sun, little shade",
+      "source": "Architecture Sec 6.5 design assumption",
+      "verified": false
+    },
+    {
+      "id": "vendor_standing",
+      "icon": "Store",
+      "nameKey": "preset.vendor_standing",
+      "defaultWorkload": "light",
+      "notes": "Standing at stall/shopfront under partial or no cover",
+      "source": "Architecture Sec 6.5 design assumption",
+      "verified": false
+    },
+    {
+      "id": "vendor_cart",
+      "icon": "ShoppingBag",
+      "nameKey": "preset.vendor_cart",
+      "defaultWorkload": "moderate",
+      "notes": "Pushing heavy cart through streets",
+      "source": "Architecture Sec 6.5 design assumption",
+      "verified": false
+    },
+    {
+      "id": "waste_picker",
+      "icon": "Recycle",
+      "nameKey": "preset.waste_picker",
+      "defaultWorkload": "moderate",
+      "notes": "Walking and lifting waste bins/sacks",
+      "source": "Architecture Sec 6.5 design assumption",
+      "verified": false
+    },
+    {
+      "id": "farm_labour",
+      "icon": "Wheat",
+      "nameKey": "preset.farm_labour",
+      "defaultWorkload": "moderate",
+      "notes": "Field labour under direct sun, variable intensity",
+      "source": "Architecture Sec 6.5 design assumption",
+      "verified": false
+    },
+    {
+      "id": "custom",
+      "icon": "User",
+      "nameKey": "preset.custom",
+      "defaultWorkload": "moderate",
+      "notes": "Custom selection by worker",
+      "source": "Architecture Sec 6.5 design assumption",
+      "verified": false
+    }
+  ]
+}

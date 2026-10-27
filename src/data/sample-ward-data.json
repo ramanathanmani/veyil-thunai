@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "title": "Ward-Level Heat Stress Aggregation",
+    "badge": "DEMO DATA, not real workers",
+    "note": "Synthetic ward view demonstration for municipal and union health planning. No real worker telemetry is shared.",
+    "region": "Sriperumbudur / Chennai Metropolitan Area",
+    "generatedAt": "2026-10-27T08:00:00+05:30"
+  },
+  "wards": [
+    {
+      "wardNumber": 1,
+      "wardName": "Sriperumbudur Industrial Hub",
+      "zone": "Kanchipuram District",
+      "redBandHours": 4,
+      "blackBandHours": 2,
+      "dominantRisk": "Direct Sun & Industrial Radiance",
+      "availableShadeCenters": 2,
+      "recommendation": "Deploy mobile hydration vans between 11:30 AM and 3:30 PM"
+    },
+    {
+      "wardNumber": 2,
+      "wardName": "Oragadam Auto Corridor",
+      "zone": "Kanchipuram District",
+      "redBandHours": 5,
+      "blackBandHours": 3,
+      "dominantRisk": "Asphalt Heat & Long Hauls",
+      "availableShadeCenters": 1,
+      "recommendation": "Urge logistics platforms to activate afternoon rest pauses"
+    },
+    {
+      "wardNumber": 12,
+      "wardName": "Guindy Industrial Estate",
+      "zone": "Chennai South",
+      "redBandHours": 4,
+      "blackBandHours": 1,
+      "dominantRisk": "High Coastal Humidity",
+      "availableShadeCenters": 5,
+      "recommendation": "Distribute ORS packets at bus terminuses"
+    },
+    {
+      "wardNumber": 24,
+      "wardName": "George Town Commercial Market",
+      "zone": "Chennai North",
+      "redBandHours": 3,
+      "blackBandHours": 1,
+      "dominantRisk": "Crowded Vendors & Narrow Shade",
+      "availableShadeCenters": 3,
+      "recommendation": "Setup misting canopies in vegetable and flower markets"
+    },
+    {
+      "wardNumber": 31,
+      "wardName": "Tambaram Delivery Corridor",
+      "zone": "Chengalpattu District",
+      "redBandHours": 4,
+      "blackBandHours": 2,
+      "dominantRisk": "Highway Heat & Delivery Density",
+      "availableShadeCenters": 2,
+      "recommendation": "Coordinate with petrol pumps to open driver rest shelters"
+    }
+  ]
+}

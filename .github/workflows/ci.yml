@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck / Lint (M0)
+        run: npm run lint
+
+      - name: Run Test Suite (Vitest)
+        run: npm test
+
+      - name: Verify Commit Ownership (§14.1)
+        run: npm run check-ownership
+
+      - name: Build Production PWA
+        run: npm run build

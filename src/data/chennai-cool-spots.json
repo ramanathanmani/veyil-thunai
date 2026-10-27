@@ -1,0 +1,143 @@
+{
+  "meta": {
+    "city": "Chennai",
+    "note": "Unofficial directory of public drinking water, shaded resting areas, and corporation facilities for outdoor workers in Chennai. Hand-curated from municipal notices and transport hubs. Verify on site before relying on any point.",
+    "source": "Greater Chennai Corporation (GCC) public announcements, CMRL metro facilities, and major MTC transit hubs",
+    "verified": false,
+    "lastUpdated": "2026-10-27"
+  },
+  "spots": [
+    {
+      "id": "spot_central_01",
+      "name": "Puratchi Thalaivar Dr. M.G.R Central Station Outer Concourse",
+      "type": "water",
+      "area": "Central / Park Town",
+      "address": "EVR Periyar Salai, Park Town, Chennai 600003",
+      "landmark": "Near Suburban Railway Concourse & Bus Stand",
+      "notes": "RO drinking water taps, shaded passenger concourse.",
+      "hasToilet": true,
+      "verified": false
+    },
+    {
+      "id": "spot_broadway_02",
+      "name": "Broadway MTC Terminus Shade Shelter",
+      "type": "shade",
+      "area": "Broadway / George Town",
+      "address": "Esplanade Road, George Town, Chennai 600108",
+      "landmark": "Near High Court Metro Station",
+      "notes": "Large covered bus shelter, shaded seating, public water booth.",
+      "hasToilet": true,
+      "verified": false
+    },
+    {
+      "id": "spot_tnagar_03",
+      "name": "T. Nagar Panagal Park Rest & Shade Point",
+      "type": "shade",
+      "area": "T. Nagar",
+      "address": "Prakasam Road, T. Nagar, Chennai 600017",
+      "landmark": "Panagal Park Perimeter Walkway",
+      "notes": "Tree canopy shade, park stone benches, municipal drinking water tap.",
+      "hasToilet": true,
+      "verified": false
+    },
+    {
+      "id": "spot_tnagar_04",
+      "name": "T. Nagar MTC Bus Terminus Water Point",
+      "type": "water",
+      "area": "T. Nagar",
+      "address": "Usman Road, T. Nagar, Chennai 600017",
+      "landmark": "Under Ranganathan Street Skywalk entrance",
+      "notes": "GCC drinking water cooler, accessible day restrooms.",
+      "hasToilet": true,
+      "verified": false
+    },
+    {
+      "id": "spot_guindy_05",
+      "name": "Guindy Industrial Estate Gig Rest Point",
+      "type": "rest_point",
+      "area": "Guindy",
+      "address": "GST Road, Near Guindy Metro Station, Chennai 600032",
+      "landmark": "Near Guindy Race Course / Metro Exit B",
+      "notes": "Covered rider waiting area with ceiling fans and water dispenser.",
+      "hasToilet": false,
+      "verified": false
+    },
+    {
+      "id": "spot_koyambedu_06",
+      "name": "Koyambedu Wholesale Market Shade Zone",
+      "type": "shade",
+      "area": "Koyambedu",
+      "address": "Market Road, Koyambedu, Chennai 600107",
+      "landmark": "Near Gate 3 Fruit Market Complex",
+      "notes": "Covered loading shed shade, corporation public water fountain.",
+      "hasToilet": true,
+      "verified": false
+    },
+    {
+      "id": "spot_koyambedu_07",
+      "name": "Puratchi Thalaivar Dr. MGR Bus Terminus (CMBT)",
+      "type": "water",
+      "area": "Koyambedu",
+      "address": "Jawaharlal Nehru Road, Koyambedu, Chennai 600107",
+      "landmark": "Bay 1 to Bay 6 Waiting Halls",
+      "notes": "Free chilled drinking water kiosks, clean public restrooms.",
+      "hasToilet": true,
+      "verified": false
+    },
+    {
+      "id": "spot_tambaram_08",
+      "name": "Tambaram Sanatorium MTC Hub Shelter",
+      "type": "shade",
+      "area": "Tambaram",
+      "address": "GST Road, Tambaram Sanatorium, Chennai 600047",
+      "landmark": "Opposite MEPZ Main Gate",
+      "notes": "Shaded transit platform, nearby GCC water dispenser.",
+      "hasToilet": true,
+      "verified": false
+    },
+    {
+      "id": "spot_annanagar_09",
+      "name": "Anna Nagar Tower Park Shaded Pavilions",
+      "type": "shade",
+      "area": "Anna Nagar",
+      "address": "3rd Avenue, Anna Nagar, Chennai 600040",
+      "landmark": "Near Anna Nagar Roundtana",
+      "notes": "Large open park shade, drinking water taps near south entrance.",
+      "hasToilet": true,
+      "verified": false
+    },
+    {
+      "id": "spot_adyar_10",
+      "name": "Adyar Depot & Gandhi Nagar Public Utility",
+      "type": "toilet",
+      "area": "Adyar",
+      "address": "Sardar Patel Road, Adyar, Chennai 600020",
+      "landmark": "Adyar Bus Depot Junction",
+      "notes": "GCC Namma Toilet block with drinking water tap outside.",
+      "hasToilet": true,
+      "verified": false
+    },
+    {
+      "id": "spot_velachery_11",
+      "name": "Velachery MRTS Railway Station Concourse",
+      "type": "rest_point",
+      "area": "Velachery",
+      "address": "Velachery Bypass Road, Chennai 600042",
+      "landmark": "Station Level 1 Ground Entrance",
+      "notes": "Spacious shaded ground concourse, drinking water booth.",
+      "hasToilet": true,
+      "verified": false
+    },
+    {
+      "id": "spot_egmore_12",
+      "name": "Chennai Egmore Station Gandhi Irwin Road Shaded Canopy",
+      "type": "water",
+      "area": "Egmore",
+      "address": "Gandhi Irwin Road, Egmore, Chennai 600008",
+      "landmark": "Main Entrance Portico",
+      "notes": "Drinking water fountain, shaded benches under station portico.",
+      "hasToilet": true,
+      "verified": false
+    }
+  ]
+}

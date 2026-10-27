@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "units": "degC_WBGT",
+    "note": "Prototype values from a secondary summary. Not expert-reviewed.",
+    "source": "TSI summary of NIOSH and ACGIH limits (secondary source)",
+    "verified": false
+  },
+  "acclimatised_tlv": {
+    "bands": ["75-100", "50-75", "25-50", "0-25"],
+    "light": [31.0, 31.0, 32.0, 32.5],
+    "moderate": [28.0, 29.0, 30.0, 31.5],
+    "heavy": [26.0, 27.5, 29.0, 30.5],
+    "very_heavy": [23.5, 25.5, 28.0, 30.0],
+    "flags": {
+      "moderate[1]": "assumed: source printed 39.0, looks like a typo",
+      "heavy[0]": "est",
+      "very_heavy[0]": "est",
+      "very_heavy[1]": "est"
+    },
+    "verified": false,
+    "source": "TSI summary of ACGIH TLVs"
+  },
+  "new_or_returning_action_limit": {
+    "bands": ["75-100", "50-75", "25-50", "0-25"],
+    "light": [28.0, 28.5, 29.5, 30.0],
+    "moderate": [25.0, 26.0, 27.0, 29.0],
+    "heavy": [22.5, 24.0, 25.5, 28.0],
+    "very_heavy": [20.0, 22.5, 24.5, 27.0],
+    "flags": {
+      "heavy[0]": "est",
+      "very_heavy[0]": "est",
+      "very_heavy[1]": "est"
+    },
+    "mapping_note": "Applied to unacclimatised workers per understanding of ACGIH Action Limit. VERIFY.",
+    "verified": false,
+    "source": "TSI summary of ACGIH Action Limits"
+  },
+  "work_minutes_per_hour": {
+    "75-100": [45, 60],
+    "50-75": [30, 45],
+    "25-50": [15, 30],
+    "0-25": [0, 15],
+    "source": "App design derived from work share percentages",
+    "verified": false
+  },
+  "hydration": {
+    "cup_ml": 240,
+    "every_minutes": [15, 20],
+    "ors_threshold_hours": 2,
+    "source": "NIOSH 2016 criteria: 1 cup (240 ml) every 15-20 min; ORS electrolyte replacement for work exceeding 2 hours of heavy sweating",
+    "verified": false
+  },
+  "constants": {
+    "WIND_10M_TO_2M": 0.6,
+    "DEFAULT_PRESSURE_HPA": 1005,
+    "STALE_FORECAST_HOURS": 6,
+    "SAMPLE_FALLBACK_HOURS": 24,
+    "COOLING_BREAK_INTERVAL_MINUTES": 90,
+    "COOLING_BREAK_DURATION_MINUTES": 15,
+    "source": "NDMA July 2025 Advisory (15 min cooling break per 90 min work) and meteorological rules of thumb",
+    "verified": false
+  }
+}
