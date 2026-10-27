@@ -4,55 +4,32 @@
  * Persists append-only LogEntry records into IndexedDB.
  */
 
-import { openDB, IDBPDatabase } from 'idb';
 import { LogEntry, computeEntryHash } from './chain';
 import { Band, WorkloadClass, WorkerState } from '../engine/limits';
-
-const DB_NAME = 'veyil_thunai_db';
-const DB_VERSION = 2; // Incremented for logs
-const STORE_LOGS = 'exposure_logs';
+import {
+  withDbTimeout,
+  STORE_LOGS,
+} from '../data/db';
 
 const memoryLogs: LogEntry[] = [];
-
-function isIndexedDbAvailable(): boolean {
-  return typeof window !== 'undefined' && typeof window.indexedDB !== 'undefined';
-}
-
-async function getLogDB(): Promise<IDBPDatabase> {
-  return openDB(DB_NAME, DB_VERSION, {
-    upgrade(db) {
-      if (!db.objectStoreNames.contains('forecast_cache')) {
-        db.createObjectStore('forecast_cache');
-      }
-      if (!db.objectStoreNames.contains('settings')) {
-        db.createObjectStore('settings');
-      }
-      if (!db.objectStoreNames.contains(STORE_LOGS)) {
-        db.createObjectStore(STORE_LOGS, { keyPath: 'id' });
-      }
-    },
-  });
-}
 
 /**
  * Retrieves all log entries sorted by startedAt ascending.
  */
 export async function getAllLogEntries(): Promise<LogEntry[]> {
-  if (!isIndexedDbAvailable()) {
-    return [...memoryLogs].sort(
-      (a, b) => new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime()
-    );
-  }
-  try {
-    const db = await getLogDB();
-    const entries = await db.getAll(STORE_LOGS);
-    return entries.sort(
-      (a, b) => new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime()
-    );
-  } catch (err) {
-    console.warn('Failed to read logs from IndexedDB:', err);
-    return [...memoryLogs];
-  }
+  const fallback = [...memoryLogs].sort(
+    (a, b) => new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime()
+  );
+  return withDbTimeout(
+    async (db) => {
+      const entries = await db.getAll(STORE_LOGS);
+      return entries.sort(
+        (a, b) => new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime()
+      );
+    },
+    fallback,
+    1500
+  );
 }
 
 /**
@@ -114,18 +91,15 @@ export async function startShift(params: {
   const hash = await computeEntryHash(partialEntry);
   const entry: LogEntry = { ...partialEntry, hash };
 
-  if (!isIndexedDbAvailable()) {
-    memoryLogs.push(entry);
-    return entry;
-  }
+  memoryLogs.push(entry);
 
-  try {
-    const db = await getLogDB();
-    await db.put(STORE_LOGS, entry);
-  } catch (err) {
-    console.warn('Failed to save shift start to IndexedDB:', err);
-    memoryLogs.push(entry);
-  }
+  await withDbTimeout(
+    async (db) => {
+      await db.put(STORE_LOGS, entry);
+    },
+    undefined,
+    1500
+  );
 
   return entry;
 }
@@ -149,16 +123,14 @@ export async function recordRestBreak(
 
   entry.hash = await computeEntryHash(entry);
 
-  if (!isIndexedDbAvailable()) {
-    return entry;
-  }
+  await withDbTimeout(
+    async (db) => {
+      await db.put(STORE_LOGS, entry);
+    },
+    undefined,
+    1500
+  );
 
-  try {
-    const db = await getLogDB();
-    await db.put(STORE_LOGS, entry);
-  } catch (err) {
-    console.warn('Failed to save rest break:', err);
-  }
   return entry;
 }
 
@@ -185,16 +157,14 @@ export async function endShift(params: {
 
   entry.hash = await computeEntryHash(entry);
 
-  if (!isIndexedDbAvailable()) {
-    return entry;
-  }
+  await withDbTimeout(
+    async (db) => {
+      await db.put(STORE_LOGS, entry);
+    },
+    undefined,
+    1500
+  );
 
-  try {
-    const db = await getLogDB();
-    await db.put(STORE_LOGS, entry);
-  } catch (err) {
-    console.warn('Failed to save shift end:', err);
-  }
   return entry;
 }
 
@@ -223,13 +193,14 @@ export async function recordHeatPause(params?: {
     active.note = `${existingNote}[HEAT PAUSE] ${pauseNote}`.slice(0, 280);
     active.hash = await computeEntryHash(active);
 
-    if (!isIndexedDbAvailable()) return active;
-    try {
-      const db = await getLogDB();
-      await db.put(STORE_LOGS, active);
-    } catch (err) {
-      console.warn('Failed to record heat pause on active shift:', err);
-    }
+    await withDbTimeout(
+      async (db) => {
+        await db.put(STORE_LOGS, active);
+      },
+      undefined,
+      1500
+    );
+
     return active;
   }
 

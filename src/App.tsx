@@ -38,19 +38,53 @@ export const App: React.FC = () => {
 
   // Initialize settings
   useEffect(() => {
+    let mounted = true;
+
+    // Hard failsafe: guarantee loading screen dismisses within 2.5s even if network/storage hangs
+    const failsafeTimer = setTimeout(() => {
+      if (mounted) {
+        setIsLoading(false);
+      }
+    }, 2500);
+
     async function init() {
-      const stored = await getSettings();
-      setSettings(stored);
-      if (stored.language) setLanguage(stored.language);
+      try {
+        const stored = await Promise.race([
+          getSettings(),
+          new Promise<AppSettings>((res) => setTimeout(() => res(DEFAULT_SETTINGS), 1000)),
+        ]);
+        if (!mounted) return;
+        setSettings(stored);
+        if (stored.language) setLanguage(stored.language);
 
-      // Check if user has picked a preset before
-      const onboarded = localStorage.getItem('veyil_onboarded') === 'true';
-      setHasOnboarded(onboarded);
+        // Check if user has picked a preset before
+        try {
+          const onboarded = localStorage.getItem('veyil_onboarded') === 'true';
+          setHasOnboarded(onboarded);
+        } catch {
+          // ignore storage access issues
+        }
 
-      await loadWeatherData(stored.lat, stored.lon);
-      setIsLoading(false);
+        await loadWeatherData(stored.lat, stored.lon);
+      } catch (err) {
+        console.warn('App initialization error, falling back:', err);
+        if (mounted) {
+          setForecast(loadSampleForecast());
+        }
+      } finally {
+        if (mounted) {
+          clearTimeout(failsafeTimer);
+          setIsLoading(false);
+        }
+      }
     }
+
     init();
+
+    return () => {
+      mounted = false;
+      clearTimeout(failsafeTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -69,7 +103,12 @@ export const App: React.FC = () => {
 
   const loadWeatherData = async (lat: number, lon: number) => {
     try {
-      const data = await getForecast(lat, lon);
+      const data = await Promise.race([
+        getForecast(lat, lon),
+        new Promise<ForecastResponse>((_, rej) =>
+          setTimeout(() => rej(new Error('Weather fetch timeout')), 2500)
+        ),
+      ]);
       setForecast(data);
     } catch {
       setForecast(loadSampleForecast());
