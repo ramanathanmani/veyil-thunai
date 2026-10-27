@@ -207,7 +207,7 @@ export const ScreenS4WorkLog: React.FC<ScreenS4WorkLogProps> = ({
         className="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm space-y-4 text-center"
       >
         <span className="text-xs uppercase font-bold text-stone-700 tracking-wider">
-          {activeShift ? t('s4.shift_active') : 'No Active Shift'}
+          {activeShift ? t('s4.shift_active') : t('s4.no_active_shift')}
         </span>
 
         {activeShift ? (
@@ -218,7 +218,7 @@ export const ScreenS4WorkLog: React.FC<ScreenS4WorkLogProps> = ({
                 {formatTimer(elapsedSeconds)}
               </span>
               <p className="text-xs text-stone-700 mt-1">
-                Started at {new Date(activeShift.startedAt).toLocaleTimeString()}
+                {t('s4.started_at', { time: new Date(activeShift.startedAt).toLocaleTimeString() })}
               </p>
               <div className="mt-1">
                 <button
@@ -276,7 +276,7 @@ export const ScreenS4WorkLog: React.FC<ScreenS4WorkLogProps> = ({
               <div className="bg-sky-50 border border-sky-300 rounded-xl p-3 text-left space-y-1.5 text-xs text-sky-950">
                 <div className="flex items-center gap-1.5 font-bold text-sky-900">
                   <Droplets className="w-4 h-4 text-sky-600 shrink-0" aria-hidden="true" />
-                  <span>ORS & Hydration Advisory</span>
+                  <span>{t('s4.ors_title')}</span>
                 </div>
                 <p className="leading-snug">{t('s4.ors_prompt')}</p>
                 <p className="text-[10px] text-sky-700 font-medium">{t('s4.ors_source')}</p>
@@ -358,7 +358,7 @@ export const ScreenS4WorkLog: React.FC<ScreenS4WorkLogProps> = ({
         ) : (
           <div className="py-6 space-y-4">
             <p className="text-sm text-stone-600 max-w-xs mx-auto">
-              Start recording ambient heat exposure and your rest breaks securely on this phone.
+              {t('s4.intro_text')}
             </p>
 
             <button

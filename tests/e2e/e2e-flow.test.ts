@@ -72,7 +72,7 @@ describe('T-E-01: End-to-End Online Flow (S1 -> S2 -> S3)', () => {
     const middayTestTime = new Date('2026-10-27T14:10:00+05:30');
     const currentHourPlan = findCurrentHourPlan(dayPlan, middayTestTime);
     expect(currentHourPlan).not.toBeNull();
-    expect(currentHourPlan?.hourISO).toBe('2026-10-27T14:00');
+    expect(currentHourPlan?.hourISO).toMatch(/^2026-10-27T14:00/);
     // 38°C at 45% RH with 750 W/m2 radiation yields severe/extreme heat
     expect(['orange', 'red', 'black']).toContain(currentHourPlan?.band);
 

@@ -57,7 +57,14 @@ export function parseOpenMeteoPayload(payload: any): HourlyForecastItem[] {
   const items: HourlyForecastItem[] = [];
 
   for (let i = 0; i < times.length; i++) {
-    const timeISO = times[i];
+    const rawTime = times[i];
+    // Open-Meteo returns timestamps like "2026-10-27T13:00" for Asia/Kolkata.
+    // Ensure all timestamps have explicit "+05:30" offset if missing,
+    // so solar calculation and date parsing is identical worldwide regardless of device timezone.
+    const timeISO =
+      rawTime.includes('+') || rawTime.endsWith('Z')
+        ? rawTime
+        : `${rawTime}+05:30`;
     const tempC = h.temperature_2m && h.temperature_2m[i] !== null ? Number(h.temperature_2m[i]) : 30.0;
     const rhPct = h.relative_humidity_2m && h.relative_humidity_2m[i] !== null ? Number(h.relative_humidity_2m[i]) : 50.0;
     const dewPointC = h.dew_point_2m && h.dew_point_2m[i] !== null ? Number(h.dew_point_2m[i]) : undefined;

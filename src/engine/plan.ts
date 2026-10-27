@@ -161,13 +161,30 @@ export function findCurrentHourPlan(plans: HourPlan[], now: Date = new Date()): 
     // ignore Intl timezone errors and try standard matching
   }
 
-  // 2. Try matching the hour number within the day (0..23)
-  const currentHourNum = now.getHours();
+  // 2. Try matching the Asia/Kolkata hour number within the day (0..23)
+  const kolkataHourNum = (() => {
+    try {
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Kolkata',
+        hour: 'numeric',
+        hour12: false,
+      }).formatToParts(now);
+      const hStr = parts.find((p) => p.type === 'hour')?.value;
+      if (hStr) {
+        const hVal = parseInt(hStr, 10);
+        return hVal === 24 ? 0 : hVal;
+      }
+    } catch {
+      // fallback if Intl timeZone fails
+    }
+    return now.getHours();
+  })();
+
   const hourMatch = plans.find((p) => {
     const tIndex = p.hourISO.indexOf('T');
     if (tIndex !== -1) {
       const planHour = parseInt(p.hourISO.slice(tIndex + 1, tIndex + 3), 10);
-      return planHour === currentHourNum;
+      return planHour === kolkataHourNum;
     }
     return false;
   });
@@ -213,7 +230,13 @@ export function isPeakHeatHour(hourISO: string): boolean {
       if (!isNaN(h)) return h >= 11 && h < 16;
     }
     const d = new Date(hourISO);
-    const h = d.getHours();
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Kolkata',
+      hour: 'numeric',
+      hour12: false,
+    }).formatToParts(d);
+    const hStr = parts.find((p) => p.type === 'hour')?.value;
+    const h = hStr ? parseInt(hStr, 10) : d.getHours();
     return h >= 11 && h < 16;
   } catch {
     return false;

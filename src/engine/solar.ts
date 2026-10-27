@@ -34,7 +34,14 @@ export function calculateSolarParameters(
   solarRaw: number,
   inShade: boolean = false
 ): SolarParams {
-  const d = typeof date === 'string' ? new Date(date) : date;
+  let d: Date;
+  if (typeof date === 'string') {
+    // If timestamp string has no timezone offset, assume Asia/Kolkata (+05:30)
+    const normalized = date.includes('+') || date.endsWith('Z') ? date : `${date}+05:30`;
+    d = new Date(normalized);
+  } else {
+    d = date;
+  }
 
   // Extract UTC components
   let year = d.getUTCFullYear();

@@ -20,6 +20,7 @@ import {
   AlertOctagon,
   MapPin,
   Smartphone,
+  Share2,
 } from 'lucide-react';
 
 interface ScreenS2TodayProps {
@@ -78,6 +79,34 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
     speakText(speechText, currentPlan.templateIds);
   };
 
+  const handleWhatsAppShare = async () => {
+    const alertText = t('s2.whatsapp_share_alert', {
+      location: locationName,
+      wbgt: currentPlan.wbgtC.toFixed(1),
+      band: t(`band.${currentPlan.band}.label`),
+    });
+
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Veyil Thunai Heat Alert',
+          text: alertText,
+        });
+        return;
+      } catch {
+        // Fallback to WhatsApp URI scheme
+      }
+    }
+
+    try {
+      window.open(`whatsapp://send?text=${encodeURIComponent(alertText)}`, '_blank');
+    } catch {
+      if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        await navigator.clipboard.writeText(alertText);
+      }
+    }
+  };
+
   return (
     <div className="w-full max-w-md mx-auto px-4 py-4 space-y-4">
       {/* Header status bar */}
@@ -91,6 +120,18 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
           <span>{ageFormatted}</span>
         </div>
       </header>
+
+      {/* Safe Offline Fallback Banner (Historical Weather) */}
+      {currentPlan.dataQuality === 'sample' && (
+        <div className="flex items-start gap-2.5 p-3 bg-amber-50 border border-amber-300 rounded-xl text-amber-950 text-xs">
+          <AlertCircle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <span className="font-bold text-[11px] text-amber-900 block">
+              {t('s2.offline_baseline_warning')}
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Heat Alert Day Banner (Priority 3 Item 10) */}
       {isHeatAlertDay && (
@@ -111,9 +152,9 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
           <Sun className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
           <div>
             <span className="font-bold uppercase tracking-wider text-[11px] text-amber-800 block">
-              {t('plan.peak_heat_window_badge')} (11:00 – 16:00 IST)
+              {t('plan.peak_heat_badge')} (11:00 – 16:00 IST)
             </span>
-            <span className="font-medium text-stone-800">{t('plan.peak_heat_window_desc')}</span>
+            <span className="font-medium text-stone-800">{t('plan.peak_heat_strip')}</span>
           </div>
         </div>
       )}
@@ -137,7 +178,7 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
             <span className="text-3xl font-black text-stone-900 tracking-tight">
               {currentPlan.wbgtC.toFixed(1)}°
             </span>
-            <span className="text-xs text-stone-700 block font-medium">WBGT Est.</span>
+            <span className="text-xs text-stone-700 block font-medium">{t('s2.wbgt_est')}</span>
             {currentPlan.isFallbackSimple && (
               <span className="inline-block mt-0.5 px-1.5 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-900 rounded border border-amber-300">
                 {t('plan.rough_estimate_badge')}
@@ -173,7 +214,7 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
           ) : (
             <>
               <Volume2 className="w-5 h-5 shrink-0 text-orange-600" aria-hidden="true" />
-              <span>{t('s2.listen_button')} (Voice Guidance)</span>
+              <span>{t('s2.listen_button')} ({t('s2.voice_guidance')})</span>
             </>
           )}
         </button>
@@ -197,11 +238,11 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
           <div className="bg-stone-100 p-2.5 rounded-lg border border-stone-200 flex items-center gap-2">
             <Clock className="w-4 h-4 text-stone-600 shrink-0" aria-hidden="true" />
             <div>
-              <span className="text-stone-700 block">Work / hour</span>
+              <span className="text-stone-700 block">{t('s2.work_per_hour')}</span>
               <span className="font-bold text-stone-900">
                 {currentPlan.maxWorkMinPerHour !== null
-                  ? `${currentPlan.maxWorkMinPerHour} min max`
-                  : 'Stop work'}
+                  ? t('s2.min_max', { min: currentPlan.maxWorkMinPerHour })
+                  : t('act.stop_work')}
               </span>
             </div>
           </div>
@@ -209,11 +250,11 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
           <div className="bg-stone-100 p-2.5 rounded-lg border border-stone-200 flex items-center gap-2">
             <Umbrella className="w-4 h-4 text-stone-600 shrink-0" aria-hidden="true" />
             <div>
-              <span className="text-stone-700 block">Rest / hour</span>
+              <span className="text-stone-700 block">{t('s2.rest_per_hour')}</span>
               <span className="font-bold text-stone-900">
                 {currentPlan.minRestMinPerHour !== null
-                  ? `${currentPlan.minRestMinPerHour} min rest`
-                  : 'Rest in shade'}
+                  ? t('s2.min_rest', { min: currentPlan.minRestMinPerHour })
+                  : t('act.rest_shade')}
               </span>
             </div>
           </div>
@@ -241,22 +282,26 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
         <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-100 text-center text-xs">
           <div>
             <span className="text-stone-700 flex items-center justify-center gap-1">
-              <Thermometer className="w-3.5 h-3.5" aria-hidden="true" /> Air
+              <Thermometer className="w-3.5 h-3.5" aria-hidden="true" /> {t('s2.air')}
             </span>
             <span className="font-bold text-stone-900">{currentPlan.tempC.toFixed(0)}°C</span>
           </div>
           <div>
             <span className="text-stone-700 flex items-center justify-center gap-1">
-              <Droplets className="w-3.5 h-3.5" aria-hidden="true" /> Humidity
+              <Droplets className="w-3.5 h-3.5" aria-hidden="true" /> {t('s2.humidity')}
             </span>
             <span className="font-bold text-stone-900">{currentPlan.rhPct}%</span>
           </div>
           <div>
             <span className="text-stone-700 flex items-center justify-center gap-1">
-              <Sun className="w-3.5 h-3.5" aria-hidden="true" /> Solar
+              <Sun className="w-3.5 h-3.5" aria-hidden="true" /> {t('s2.solar')}
             </span>
             <span className="font-bold text-stone-900">
-              {inShade ? '0 (Shade)' : currentPlan.solarWm2 ? `${currentPlan.solarWm2} W` : '0 W'}
+              {inShade
+                ? `0 (${t('s2.shade_label')})`
+                : currentPlan.solarWm2
+                ? `${currentPlan.solarWm2} W`
+                : '0 W'}
             </span>
           </div>
         </div>
@@ -311,6 +356,17 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
           <span>{t('share.button')}</span>
         </button>
       </div>
+
+      {/* 1-Tap Client-Side WhatsApp Share Button */}
+      <button
+        type="button"
+        onClick={handleWhatsAppShare}
+        className="w-full min-h-[48px] px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-xs transition-colors"
+        aria-label={t('s2.whatsapp_share_button')}
+      >
+        <Share2 className="w-4 h-4 text-white shrink-0" aria-hidden="true" />
+        <span>{t('s2.whatsapp_share_button')}</span>
+      </button>
 
       {/* Navigation Quick Actions */}
       <div className="grid grid-cols-2 gap-3 pt-1">

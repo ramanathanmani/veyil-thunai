@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from '../../i18n/useTranslation';
+import { HeatStrokeTriageModal } from '../components/HeatStrokeTriageModal';
 import {
   PhoneCall,
   Droplets,
   Scale,
   HeartPulse,
   AlertCircle,
+  AlertOctagon,
 } from 'lucide-react';
 
 export const ScreenS6Learn: React.FC = () => {
   const { t } = useTranslation();
+  const [isTriageOpen, setIsTriageOpen] = useState<boolean>(false);
 
   return (
     <div className="w-full max-w-md mx-auto px-4 py-4 space-y-4">
@@ -56,6 +59,17 @@ export const ScreenS6Learn: React.FC = () => {
           </a>
         </div>
       </section>
+
+      {/* 5-Question Heat-Stroke Rapid Triage Button */}
+      <button
+        type="button"
+        onClick={() => setIsTriageOpen(true)}
+        className="w-full min-h-[48px] px-4 py-2.5 bg-rose-50 hover:bg-rose-100 border-2 border-rose-300 text-rose-900 font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-xs transition-colors"
+        aria-label={t('s6.rapid_triage_btn')}
+      >
+        <AlertOctagon className="w-4 h-4 text-rose-600 shrink-0" aria-hidden="true" />
+        <span>{t('s6.rapid_triage_btn')}</span>
+      </button>
 
       {/* Heat Symptoms & First Aid */}
       <section
@@ -132,6 +146,11 @@ export const ScreenS6Learn: React.FC = () => {
           {t('s6.women_content')}
         </p>
       </section>
+
+      <HeatStrokeTriageModal
+        isOpen={isTriageOpen}
+        onClose={() => setIsTriageOpen(false)}
+      />
     </div>
   );
 };

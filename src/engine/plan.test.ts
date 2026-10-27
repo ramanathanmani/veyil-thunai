@@ -89,4 +89,22 @@ describe('Hour Plan Generation', () => {
     expect(isPeakHeatHour('2026-10-27T16:00')).toBe(false);
     expect(isPeakHeatHour('2026-10-27T18:00')).toBe(false);
   });
+
+  it('findCurrentHourPlan correctly matches IST hour even when evaluated from UTC date', () => {
+    const hourlyItems = [
+      { timeISO: '2026-10-27T00:00+05:30', tempC: 25, rhPct: 80 },
+      { timeISO: '2026-10-27T13:00+05:30', tempC: 36, rhPct: 50 },
+      { timeISO: '2026-10-27T18:00+05:30', tempC: 30, rhPct: 70 },
+    ];
+    const dayPlan = buildDayPlan(hourlyItems, {
+      lat: 13.08,
+      lon: 80.27,
+      workload: 'moderate',
+      workerState: 'acclimatised',
+    });
+    // 07:35 UTC is 13:05 IST
+    const utcDate = new Date('2026-10-27T07:35:00Z');
+    const match = findCurrentHourPlan(dayPlan, utcDate);
+    expect(match?.hourISO).toContain('13:00');
+  });
 });

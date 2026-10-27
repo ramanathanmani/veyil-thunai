@@ -19,7 +19,7 @@ interface CoolSpotsModalProps {
 type FilterType = 'all' | 'water' | 'shade' | 'rest_point' | 'toilet';
 
 export const CoolSpotsModal: React.FC<CoolSpotsModalProps> = ({ isOpen, onClose }) => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
 
   if (!isOpen) return null;
@@ -107,25 +107,41 @@ export const CoolSpotsModal: React.FC<CoolSpotsModalProps> = ({ isOpen, onClose 
 
         {/* Spot List */}
         <div className="p-4 space-y-3 overflow-y-auto flex-1 divide-y divide-stone-100">
-          {filteredSpots.map((spot) => (
-            <article key={spot.id} className="pt-3 first:pt-0 space-y-1 text-xs">
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex items-center gap-1.5">
-                  {getTypeIcon(spot.type)}
-                  <h3 className="font-bold text-stone-900 text-sm">{spot.name}</h3>
+          {filteredSpots.map((spot) => {
+            const spotAny = spot as any;
+            const spotName =
+              language === 'ta' && spotAny.name_ta
+                ? spotAny.name_ta
+                : language === 'hi' && spotAny.name_hi
+                ? spotAny.name_hi
+                : spot.name;
+            const spotArea =
+              language === 'ta' && spotAny.area_ta
+                ? spotAny.area_ta
+                : language === 'hi' && spotAny.area_hi
+                ? spotAny.area_hi
+                : spot.area;
+
+            return (
+              <article key={spot.id} className="pt-3 first:pt-0 space-y-1 text-xs">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    {getTypeIcon(spot.type)}
+                    <h3 className="font-bold text-stone-900 text-sm">{spotName}</h3>
+                  </div>
+                  <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-stone-100 text-stone-700 border border-stone-200">
+                    {spotArea}
+                  </span>
                 </div>
-                <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-stone-100 text-stone-700 border border-stone-200">
-                  {spot.area}
-                </span>
-              </div>
-              <p className="text-stone-700 font-medium">{spot.landmark}</p>
-              <p className="text-stone-700 leading-snug">{spot.notes}</p>
-              <div className="flex items-center gap-3 pt-0.5 text-[10px] text-stone-700">
-                <span>📍 {spot.address}</span>
-                {spot.hasToilet && <span className="font-semibold text-emerald-700">✓ Toilet Available</span>}
-              </div>
-            </article>
-          ))}
+                <p className="text-stone-700 font-medium">{spot.landmark}</p>
+                <p className="text-stone-700 leading-snug">{spot.notes}</p>
+                <div className="flex items-center gap-3 pt-0.5 text-[10px] text-stone-700">
+                  <span>📍 {spot.address}</span>
+                  {spot.hasToilet && <span className="font-semibold text-emerald-700">{t('cool_spots.toilet_available')}</span>}
+                </div>
+              </article>
+            );
+          })}
         </div>
 
         {/* Footer */}

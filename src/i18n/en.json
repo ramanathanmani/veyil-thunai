@@ -203,5 +203,44 @@
 
   "s6.women_title": "Women Outdoor Workers & Hydration Challenges",
   "s6.women_source": "Source: NDMA Heatwave Action Plan & Public Health Guidelines",
-  "s6.women_content": "Restricting fluid intake due to locked or distant public toilets during heatwaves severely increases the risk of heat exhaustion and kidney/UTI infections. Public health guidelines urge municipal corporations and platforms to ensure clean, accessible toilets and cool water points for all women workers."
+  "s6.women_content": "Restricting fluid intake due to locked or distant public toilets during heatwaves severely increases the risk of heat exhaustion and kidney/UTI infections. Public health guidelines urge municipal corporations and platforms to ensure clean, accessible toilets and cool water points for all women workers.",
+
+  "s2.wbgt_est": "WBGT Est.",
+  "s2.voice_guidance": "Voice Guidance",
+  "s2.work_per_hour": "Work / hour",
+  "s2.rest_per_hour": "Rest / hour",
+  "s2.min_max": "{min} min max",
+  "s2.min_rest": "{min} min rest",
+  "s2.air": "Air",
+  "s2.humidity": "Humidity",
+  "s2.solar": "Solar",
+  "s2.shade_label": "Shade",
+  "s2.offline_baseline_warning": "Offline Baseline Data: Historical weather shown. Maintain extreme caution between 11:00 AM – 4:00 PM.",
+  "s2.whatsapp_share_alert": "🚨 Heat Alert ({location}): Current WBGT is {wbgt}°C ({band} band). Take regular rest in shade and drink ORS/water. Safe work guidance: https://veyil-thunai.vercel.app/",
+  "s2.whatsapp_share_button": "Share Heat Alert (WhatsApp)",
+
+  "s3.tap_hour_prompt": "Tap hour for work/rest plan",
+  "s3.work_label": "Work",
+  "s3.minutes_max": "{min} minutes max",
+  "s3.minutes_min": "{min} minutes min",
+  "s3.primary_drivers": "Primary Heat Drivers:",
+
+  "s4.no_active_shift": "No Active Shift",
+  "s4.intro_text": "Start recording ambient heat exposure and your rest breaks safely on this phone.",
+  "s4.started_at": "Started at {time}",
+  "s4.ors_title": "ORS & Hydration Advisory",
+
+  "cool_spots.toilet_available": "✓ Toilet Available",
+
+  "s6.rapid_triage_btn": "Emergency Heat Stroke Triage",
+  "s6.triage_title": "Heat Stroke Rapid Check",
+  "s6.triage_subtitle": "Check if the worker has any of these critical danger symptoms:",
+  "s6.triage_q1": "Confusion, dizziness, or slurred speech",
+  "s6.triage_q2": "Hot, dry skin OR stopped sweating in high heat",
+  "s6.triage_q3": "Repeated vomiting or severe nausea",
+  "s6.triage_q4": "Rapid, pounding heart rate or heavy breathing",
+  "s6.triage_q5": "Loss of consciousness, seizures, or fainting",
+  "s6.triage_danger": "CRITICAL DANGER: Possible Heat Stroke! Call 108 immediately. Move worker to shade, loosen clothing, and pour cool water over head and body.",
+  "s6.triage_safe": "No critical emergency signs checked. Continue frequent hydration, ORS, and resting in shade as advised.",
+  "s6.triage_close": "Close Triage"
 }

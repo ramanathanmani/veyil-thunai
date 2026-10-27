@@ -73,7 +73,7 @@ export const ScreenS3DayPlan: React.FC<ScreenS3DayPlanProps> = ({
       {/* 24-Hour Horizontal / Scrollable Strip with 48px Touch Targets */}
       <section aria-label="Hourly timeline" className="space-y-2">
         <h2 className="text-xs uppercase font-bold text-stone-700 tracking-wider">
-          Tap hour for work/rest plan
+          {t('s3.tap_hour_prompt')}
         </h2>
         <div className="flex gap-2 overflow-x-auto pb-2 pt-1 scrollbar-thin">
           {dayPlan.map((hp, idx) => {
@@ -166,19 +166,19 @@ export const ScreenS3DayPlan: React.FC<ScreenS3DayPlanProps> = ({
             </span>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="bg-stone-50 p-2.5 rounded-lg border border-stone-200">
-                <span className="text-stone-700 block">Work</span>
+                <span className="text-stone-700 block">{t('s3.work_label')}</span>
                 <span className="font-bold text-stone-900 text-sm">
                   {selectedHour.maxWorkMinPerHour !== null
-                    ? `${selectedHour.maxWorkMinPerHour} minutes max`
-                    : 'Stop strenuous work'}
+                    ? t('s3.minutes_max', { min: selectedHour.maxWorkMinPerHour })
+                    : t('act.stop_work')}
                 </span>
               </div>
               <div className="bg-stone-50 p-2.5 rounded-lg border border-stone-200">
-                <span className="text-stone-700 block">Rest in shade</span>
+                <span className="text-stone-700 block">{t('act.rest_shade')}</span>
                 <span className="font-bold text-stone-900 text-sm">
                   {selectedHour.minRestMinPerHour !== null
-                    ? `${selectedHour.minRestMinPerHour} minutes min`
-                    : 'Rest in shade'}
+                    ? t('s3.minutes_min', { min: selectedHour.minRestMinPerHour })
+                    : t('act.rest_shade')}
                 </span>
               </div>
             </div>
@@ -187,7 +187,7 @@ export const ScreenS3DayPlan: React.FC<ScreenS3DayPlanProps> = ({
           {/* Reasons */}
           {selectedHour.reasons.length > 0 && (
             <div className="bg-stone-50 p-2.5 rounded-lg text-xs text-stone-800 space-y-1">
-              <span className="font-bold block text-stone-900">Primary Heat Drivers:</span>
+              <span className="font-bold block text-stone-900">{t('s3.primary_drivers')}</span>
               <ul className="list-disc list-inside space-y-0.5 text-stone-700">
                 {selectedHour.reasons.map((r) => (
                   <li key={r}>{t(`reason.${r}`)}</li>
@@ -200,19 +200,19 @@ export const ScreenS3DayPlan: React.FC<ScreenS3DayPlanProps> = ({
           <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-100 text-center text-xs">
             <div>
               <span className="text-stone-700 flex items-center justify-center gap-1">
-                <Thermometer className="w-3.5 h-3.5" aria-hidden="true" /> Air
+                <Thermometer className="w-3.5 h-3.5" aria-hidden="true" /> {t('s2.air')}
               </span>
               <span className="font-bold text-stone-900">{selectedHour.tempC.toFixed(0)}°C</span>
             </div>
             <div>
               <span className="text-stone-700 flex items-center justify-center gap-1">
-                <Droplets className="w-3.5 h-3.5" aria-hidden="true" /> Humidity
+                <Droplets className="w-3.5 h-3.5" aria-hidden="true" /> {t('s2.humidity')}
               </span>
               <span className="font-bold text-stone-900">{selectedHour.rhPct}%</span>
             </div>
             <div>
               <span className="text-stone-700 flex items-center justify-center gap-1">
-                <Sun className="w-3.5 h-3.5" aria-hidden="true" /> Solar
+                <Sun className="w-3.5 h-3.5" aria-hidden="true" /> {t('s2.solar')}
               </span>
               <span className="font-bold text-stone-900">
                 {selectedHour.solarWm2 ? `${selectedHour.solarWm2} W` : '0 W'}

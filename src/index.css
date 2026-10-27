@@ -19,6 +19,29 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Indic typography overrides: Tamil & Devanagari require zero tracking, generous line-height, and font fallbacks */
+html[lang="ta"] {
+  font-family: -apple-system, BlinkMacSystemFont, 'Tamil Sangam MN', 'Mukta Malar', 'Noto Sans Tamil', 'Latha', system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+html[lang="hi"] {
+  font-family: -apple-system, BlinkMacSystemFont, 'Kohinoor Devanagari', 'Noto Sans Devanagari', 'Mangal', system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+/* Suppress letter-spacing and uppercase that breaks Indic diacritics and ligatures */
+html[lang="ta"] *,
+html[lang="hi"] * {
+  letter-spacing: 0 !important;
+}
+
+html[lang="ta"] [class*="tracking-"],
+html[lang="hi"] [class*="tracking-"] {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
 #root {
   width: 100%;
 }

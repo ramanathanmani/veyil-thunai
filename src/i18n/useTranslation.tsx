@@ -46,6 +46,13 @@ export const I18nProvider: React.FC<{
     }
   }, []);
 
+  // Update <html lang="..."> attribute dynamically for screen readers (TalkBack / VoiceOver)
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = language;
+    }
+  }, [language]);
+
   const t = (key: string, params?: Record<string, string | number>): string => {
     const dict = translations[language] || translations.en;
     let text = dict[key] || translations.en[key] || key;
@@ -76,7 +83,7 @@ export const I18nProvider: React.FC<{
         const utterance = new SpeechSynthesisUtterance(text);
         if (language === 'ta') utterance.lang = 'ta-IN';
         else if (language === 'hi') utterance.lang = 'hi-IN';
-        else utterance.lang = 'en-US';
+        else utterance.lang = 'en-IN';
 
         utterance.onend = () => {
           setIsSpeaking(false);
