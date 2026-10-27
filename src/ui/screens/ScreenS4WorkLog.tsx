@@ -409,6 +409,11 @@ export const ScreenS4WorkLog: React.FC<ScreenS4WorkLogProps> = ({
         onClose={() => setIsHeatPauseOpen(false)}
         currentPlan={currentPlan}
         onNavigateToLearn={onNavigateToLearn}
+        preset={jobPreset}
+        workload={workload}
+        workerState={workerState}
+        lat={lat}
+        lon={lon}
       />
 
       {/* Tamper-evident notice & Medical disclaimer (D-10 / §2.1) */}

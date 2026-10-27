@@ -95,4 +95,73 @@ export const TAMIL_NADU_CITIES: LocationCity[] = [
   },
 ];
 
+export const NATIONAL_HEAT_CITIES: LocationCity[] = [
+  {
+    id: 'delhi',
+    nameEn: 'Delhi NCR',
+    nameTa: 'டெல்லி (NCR)',
+    nameHi: 'दिल्ली (एनसीआर)',
+    lat: 28.61,
+    lon: 77.21,
+  },
+  {
+    id: 'mumbai',
+    nameEn: 'Mumbai',
+    nameTa: 'மும்பை',
+    nameHi: 'मुंबई',
+    lat: 19.08,
+    lon: 72.88,
+  },
+  {
+    id: 'nagpur',
+    nameEn: 'Nagpur (Vidarbha)',
+    nameTa: 'நாக்பூர்',
+    nameHi: 'नागपुर',
+    lat: 21.15,
+    lon: 79.08,
+  },
+  {
+    id: 'ahmedabad',
+    nameEn: 'Ahmedabad',
+    nameTa: 'அகமதாபாத்',
+    nameHi: 'अहमदाबाद',
+    lat: 23.02,
+    lon: 72.57,
+  },
+  {
+    id: 'hyderabad',
+    nameEn: 'Hyderabad',
+    nameTa: 'ஹைதராபாத்',
+    nameHi: 'हैदराबाद',
+    lat: 17.39,
+    lon: 78.49,
+  },
+  {
+    id: 'bengaluru',
+    nameEn: 'Bengaluru',
+    nameTa: 'பெங்களூரு',
+    nameHi: 'बेंगलुरु',
+    lat: 12.97,
+    lon: 77.59,
+  },
+  {
+    id: 'bhubaneswar',
+    nameEn: 'Bhubaneswar',
+    nameTa: 'புவனேஸ்வர்',
+    nameHi: 'भुवनेश्वर',
+    lat: 20.3,
+    lon: 85.82,
+  },
+  {
+    id: 'kolkata',
+    nameEn: 'Kolkata',
+    nameTa: 'கொல்கத்தா',
+    nameHi: 'कोलकाता',
+    lat: 22.57,
+    lon: 88.36,
+  },
+];
+
+export const ALL_CITIES: LocationCity[] = [...TAMIL_NADU_CITIES, ...NATIONAL_HEAT_CITIES];
+
 export const DEFAULT_LOCATION = TAMIL_NADU_CITIES[0]; // Sriperumbudur

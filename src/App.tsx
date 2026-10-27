@@ -12,7 +12,7 @@ import { ScreenS8WardView } from './ui/screens/ScreenS8WardView';
 import { getForecast, ForecastResponse, loadSampleForecast } from './data/forecast';
 import { getSettings, saveSettings, AppSettings, DEFAULT_SETTINGS } from './data/cache';
 import { buildDayPlan, findCurrentHourPlan, HourPlan } from './engine/plan';
-import { TAMIL_NADU_CITIES } from './data/locations';
+import { TAMIL_NADU_CITIES, ALL_CITIES } from './data/locations';
 import presetsData from '../config/presets.json';
 import {
   Sun,
@@ -123,11 +123,9 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleOnboardingComplete = (data: {
-    preset: string;
-    workload: any;
-    workerState: any;
-  }) => {
+  const handleOnboardingComplete = (
+    data: Pick<AppSettings, 'presetId' | 'workload' | 'workerState'>
+  ) => {
     handleUpdateSettings(data);
     localStorage.setItem('veyil_onboarded', 'true');
     setHasOnboarded(true);
@@ -142,8 +140,15 @@ export const App: React.FC = () => {
     inShade,
   })[0] : null);
 
-  const city = TAMIL_NADU_CITIES.find((c) => c.id === settings.locationId) || TAMIL_NADU_CITIES[0];
-  const locationName = language === 'ta' ? city.nameTa : language === 'hi' ? city.nameHi : city.nameEn;
+  const city = ALL_CITIES.find((c) => c.id === settings.locationId) || TAMIL_NADU_CITIES[0];
+  const locationName =
+    settings.locationId === 'current_gps'
+      ? `GPS (${settings.lat}°N, ${settings.lon}°E)`
+      : language === 'ta'
+      ? city.nameTa
+      : language === 'hi'
+      ? city.nameHi
+      : city.nameEn;
 
   const currentPreset = presetsData.presets.find((p) => p.id === settings.presetId) || presetsData.presets[0];
   const jobTitle = t(currentPreset.nameKey);
@@ -161,7 +166,7 @@ export const App: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center bg-stone-100 p-4">
         <div className="text-center space-y-2">
           <Sun className="w-8 h-8 text-orange-500 animate-spin mx-auto" aria-hidden="true" />
-          <p className="text-sm font-semibold text-stone-700">Loading Veyil Thunai...</p>
+          <p className="text-sm font-semibold text-stone-700">{t('app.loading')}</p>
         </div>
       </div>
     );
@@ -235,7 +240,7 @@ export const App: React.FC = () => {
               }`}
             >
               <Building2 className="w-3.5 h-3.5 text-orange-600" aria-hidden="true" />
-              <span className="hidden sm:inline">Ward Demo</span>
+              <span className="hidden sm:inline">{t('app.ward_demo')}</span>
             </button>
           </div>
         </div>
@@ -254,11 +259,17 @@ export const App: React.FC = () => {
             onNavigateToPlan={() => setActiveTab('plan')}
             onNavigateToLog={() => setActiveTab('log')}
             onNavigateToLearn={() => setActiveTab('learn')}
+            settings={settings}
           />
         )}
 
         {activeTab === 'plan' && (
-          <ScreenS3DayPlan dayPlan={dayPlan} jobTitle={jobTitle} presetId={settings.presetId} />
+          <ScreenS3DayPlan
+            dayPlan={dayPlan}
+            jobTitle={jobTitle}
+            presetId={settings.presetId}
+            currentHourISO={currentHourPlan?.hourISO}
+          />
         )}
 
         {activeTab === 'log' && currentHourPlan && (

@@ -82,7 +82,7 @@ export const ScreenS8WardView: React.FC = () => {
               {ward.redBandHours} hrs
             </span>
             <span className="text-[11px] font-semibold text-rose-900">
-              Red Band (Severe)
+              {t('band.red.name')} ({t('band.red.level')})
             </span>
           </div>
 
@@ -91,7 +91,7 @@ export const ScreenS8WardView: React.FC = () => {
               {ward.blackBandHours} hrs
             </span>
             <span className="text-[11px] font-semibold text-amber-200">
-              Black Band (Extreme)
+              {t('band.black.name')} ({t('band.black.level')})
             </span>
           </div>
         </div>
@@ -100,7 +100,7 @@ export const ScreenS8WardView: React.FC = () => {
           <div className="flex items-start gap-2 bg-stone-50 p-2.5 rounded-lg text-stone-800">
             <Flame className="w-4 h-4 text-orange-600 shrink-0 mt-0.5" aria-hidden="true" />
             <div>
-              <span className="font-bold block">Dominant Risk Driver:</span>
+              <span className="font-bold block">{t('s8.dominant_risk_label')}:</span>
               <span>{ward.dominantRisk}</span>
             </div>
           </div>
@@ -108,13 +108,13 @@ export const ScreenS8WardView: React.FC = () => {
           <div className="flex items-start gap-2 bg-stone-50 p-2.5 rounded-lg text-stone-800">
             <Droplets className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
             <div>
-              <span className="font-bold block">Available Shade / Cool Centers:</span>
-              <span>{ward.availableShadeCenters} municipal centers identified</span>
+              <span className="font-bold block">{t('s8.shade_centers_label')}:</span>
+              <span>{t('s8.centers_identified', { count: ward.availableShadeCenters })}</span>
             </div>
           </div>
 
           <div className="bg-orange-50 border border-orange-200 p-3 rounded-xl text-orange-950 font-medium">
-            <span className="font-bold block text-orange-900 mb-0.5">Municipal Action Recommendation:</span>
+            <span className="font-bold block text-orange-900 mb-0.5">{t('s8.recommendation_label')}:</span>
             <span>{ward.recommendation}</span>
           </div>
         </div>

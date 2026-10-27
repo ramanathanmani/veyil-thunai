@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { HourPlan, isPeakHeatHour } from '../../engine/plan';
 import { BandBadge } from '../components/BandBadge';
@@ -15,24 +15,71 @@ interface ScreenS3DayPlanProps {
   dayPlan: HourPlan[];
   jobTitle: string;
   presetId?: string;
+  currentHourISO?: string;
 }
 
 export const ScreenS3DayPlan: React.FC<ScreenS3DayPlanProps> = ({
   dayPlan,
   jobTitle,
   presetId,
+  currentHourISO,
 }) => {
   const { t } = useTranslation();
-  const [selectedHourIndex, setSelectedHourIndex] = useState<number>(0);
+  const [selectedHourIndex, setSelectedHourIndex] = useState<number>(() => {
+    if (!currentHourISO || dayPlan.length === 0) return 0;
+    const idx = dayPlan.findIndex((p) => p.hourISO === currentHourISO);
+    return idx >= 0 ? idx : 0;
+  });
+
+  useEffect(() => {
+    if (currentHourISO && dayPlan.length > 0) {
+      const idx = dayPlan.findIndex((p) => p.hourISO === currentHourISO);
+      if (idx >= 0) {
+        setSelectedHourIndex(idx);
+      }
+    }
+  }, [currentHourISO, dayPlan]);
 
   const selectedHour = dayPlan[selectedHourIndex] || dayPlan[0];
 
   const formatHour = (iso: string) => {
     try {
       const d = new Date(iso);
-      return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      return d.toLocaleTimeString([], {
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZone: 'Asia/Kolkata',
+      });
     } catch {
       return iso;
+    }
+  };
+
+  const isSecondDay = (iso: string) => {
+    if (dayPlan.length === 0) return false;
+    try {
+      const d0 = new Date(dayPlan[0].hourISO).toLocaleDateString('en-CA', {
+        timeZone: 'Asia/Kolkata',
+      });
+      const d = new Date(iso).toLocaleDateString('en-CA', {
+        timeZone: 'Asia/Kolkata',
+      });
+      return d !== d0;
+    } catch {
+      return false;
+    }
+  };
+
+  const formatDateChip = (iso: string) => {
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString([], {
+        month: 'short',
+        day: 'numeric',
+        timeZone: 'Asia/Kolkata',
+      });
+    } catch {
+      return '';
     }
   };
 
@@ -99,12 +146,19 @@ export const ScreenS3DayPlan: React.FC<ScreenS3DayPlanProps> = ({
                 aria-pressed={isSelected}
                 aria-label={`${timeLabel}, WBGT ${hp.wbgtC} degrees, ${hp.band} band`}
               >
+                {isSecondDay(hp.hourISO) && (
+                  <span className="text-[9px] font-bold opacity-80 uppercase tracking-tight">
+                    {formatDateChip(hp.hourISO)}
+                  </span>
+                )}
                 <span className="text-[11px] font-semibold">{timeLabel}</span>
                 <span className="text-base font-black">{hp.wbgtC.toFixed(0)}°</span>
-                <span className="text-[10px] uppercase font-bold tracking-tight">{hp.band}</span>
+                <span className="text-[10px] uppercase font-bold tracking-tight">
+                  {t(`band.${hp.band}.name`)}
+                </span>
                 {isPeakHeatHour(hp.hourISO) && (
                   <span className="text-[8px] font-black uppercase tracking-tighter bg-amber-200/90 text-amber-950 px-1 rounded-sm mt-0.5">
-                    Peak 11-4
+                    {t('s3.peak_tag')}
                   </span>
                 )}
               </button>

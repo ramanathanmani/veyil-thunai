@@ -22,7 +22,7 @@ interface ScreenS1Props {
   initialWorkload: WorkloadClass;
   initialState: WorkerState;
   onComplete: (data: {
-    preset: string;
+    presetId: string;
     workload: WorkloadClass;
     workerState: WorkerState;
   }) => void;
@@ -66,7 +66,7 @@ export const ScreenS1LanguageJob: React.FC<ScreenS1Props> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onComplete({
-      preset: selectedPreset,
+      presetId: selectedPreset,
       workload: selectedWorkload,
       workerState,
     });
@@ -152,7 +152,7 @@ export const ScreenS1LanguageJob: React.FC<ScreenS1Props> = ({
                       {t(preset.nameKey)}
                     </p>
                     <p className="text-[11px] text-stone-700 capitalize mt-0.5">
-                      {preset.defaultWorkload}
+                      {t(`workload.${preset.defaultWorkload}`)}
                     </p>
                   </div>
                 </button>
@@ -160,6 +160,35 @@ export const ScreenS1LanguageJob: React.FC<ScreenS1Props> = ({
             })}
           </div>
         </section>
+
+        {/* Custom Workload Selection */}
+        {selectedPreset === 'custom' && (
+          <section aria-labelledby="custom-workload-heading" className="space-y-2 bg-stone-50 p-3.5 rounded-xl border border-stone-200">
+            <h2 id="custom-workload-heading" className="text-xs font-bold uppercase tracking-wider text-stone-700">
+              {t('s1.custom_workload_title')}
+            </h2>
+            <div className="grid grid-cols-2 gap-2">
+              {(['light', 'moderate', 'heavy', 'very_heavy'] as WorkloadClass[]).map((wl) => {
+                const isSelected = selectedWorkload === wl;
+                return (
+                  <button
+                    key={wl}
+                    type="button"
+                    onClick={() => setSelectedWorkload(wl)}
+                    className={`min-h-[48px] px-3 py-2 rounded-xl border-2 text-xs font-semibold text-center transition-all ${
+                      isSelected
+                        ? 'border-orange-500 bg-orange-50 text-orange-950 font-bold shadow-xs'
+                        : 'border-stone-200 bg-white text-stone-800 hover:border-stone-300'
+                    }`}
+                    aria-pressed={isSelected}
+                  >
+                    {t(`workload.${wl}`)}
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         {/* Acclimatisation Experience Radio */}
         <section aria-labelledby="acclim-heading" className="space-y-2.5 bg-stone-50 p-3.5 rounded-xl border border-stone-200">

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { HourPlan } from '../../engine/plan';
 import { recordHeatPause } from '../../log/store';
+import { AppSettings } from '../../data/cache';
+import { WorkloadClass, WorkerState } from '../../engine/limits';
 import {
   PhoneCall,
   AlertOctagon,
@@ -15,6 +17,12 @@ interface HeatPauseModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentPlan?: HourPlan;
+  settings?: AppSettings;
+  preset?: string;
+  workload?: WorkloadClass;
+  workerState?: WorkerState;
+  lat?: number;
+  lon?: number;
   onRecordPause?: () => Promise<void>;
   onNavigateToLearn?: () => void;
 }
@@ -23,6 +31,12 @@ export const HeatPauseModal: React.FC<HeatPauseModalProps> = ({
   isOpen,
   onClose,
   currentPlan,
+  settings,
+  preset,
+  workload,
+  workerState,
+  lat,
+  lon,
   onRecordPause,
   onNavigateToLearn,
 }) => {
@@ -41,6 +55,12 @@ export const HeatPauseModal: React.FC<HeatPauseModalProps> = ({
         await recordHeatPause({
           wbgtC: currentPlan?.wbgtC,
           band: currentPlan?.band,
+          lat: lat ?? settings?.lat,
+          lon: lon ?? settings?.lon,
+          preset: preset ?? settings?.presetId,
+          workload: workload ?? settings?.workload,
+          workerState: workerState ?? settings?.workerState,
+          dataQuality: currentPlan?.isFallbackSimple ? 'fallback_simple' : 'forecast',
         });
       }
       setRecorded(true);
@@ -106,7 +126,7 @@ export const HeatPauseModal: React.FC<HeatPauseModalProps> = ({
               <h2 id="sos-title" className="font-black text-lg text-stone-950">
                 {t('sos.title')}
               </h2>
-              <span className="text-xs font-bold text-rose-700">Emergency & Distress Support</span>
+              <span className="text-xs font-bold text-rose-700">{t('sos.support_badge')}</span>
             </div>
           </div>
           <button
@@ -152,7 +172,7 @@ export const HeatPauseModal: React.FC<HeatPauseModalProps> = ({
             className="w-full min-h-[48px] px-3 rounded-xl border border-stone-300 hover:bg-stone-50 text-stone-800 font-semibold text-xs flex items-center justify-center gap-2"
           >
             <HeartPulse className="w-4 h-4 text-orange-600" aria-hidden="true" />
-            <span>View Heat Illness First Aid (S6)</span>
+            <span>{t('sos.view_first_aid')}</span>
           </button>
         )}
 
@@ -181,7 +201,7 @@ export const HeatPauseModal: React.FC<HeatPauseModalProps> = ({
             className="w-full min-h-[48px] px-3 rounded-xl border border-stone-300 hover:bg-stone-50 text-stone-700 font-semibold text-xs flex items-center justify-center gap-2"
           >
             <Printer className="w-4 h-4" aria-hidden="true" />
-            <span>Print Heat Pause Slip for Supervisor</span>
+            <span>{t('sos.print_slip')}</span>
           </button>
         </div>
 

@@ -127,7 +127,7 @@ export async function getForecast(
   const rLat = Math.round(lat * 100) / 100;
   const rLon = Math.round(lon * 100) / 100;
 
-  let cached = await getForecastCache();
+  let cached = await getForecastCache(rLat, rLon);
 
   try {
     const url = `${OPEN_METEO_BASE}?latitude=${rLat}&longitude=${rLon}&hourly=temperature_2m,relative_humidity_2m,dew_point_2m,cloud_cover,wind_speed_10m,shortwave_radiation,direct_radiation,diffuse_radiation,surface_pressure&timezone=Asia%2FKolkata&forecast_days=2`;

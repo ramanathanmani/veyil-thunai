@@ -128,7 +128,7 @@ export const CustomerShareModal: React.FC<CustomerShareModalProps> = ({ isOpen, 
             className="min-h-[48px] px-3 py-2 bg-white border border-stone-300 hover:bg-stone-50 text-stone-800 font-bold rounded-xl shadow-xs flex items-center justify-center gap-2 text-xs transition-colors"
           >
             <Printer className="w-4 h-4" aria-hidden="true" />
-            <span>Print Slip</span>
+            <span>{t('share.print')}</span>
           </button>
         </div>
 

@@ -152,7 +152,7 @@ export const HeatStrokeTriageModal: React.FC<HeatStrokeTriageModalProps> = ({
             className="min-h-[48px] px-3.5 rounded-xl border border-stone-300 text-stone-700 hover:bg-stone-200 text-xs font-semibold flex items-center gap-1.5 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Reset</span>
+            <span>{t('s6.triage_reset')}</span>
           </button>
           <button
             type="button"

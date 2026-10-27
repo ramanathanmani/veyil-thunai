@@ -6,6 +6,7 @@ import { MedicalDisclaimerNote } from '../components/PrototypeBanner';
 import { CoolSpotsModal } from '../components/CoolSpotsModal';
 import { HeatPauseModal } from '../components/HeatPauseModal';
 import { CustomerShareModal } from '../components/CustomerShareModal';
+import { AppSettings } from '../../data/cache';
 import {
   Volume2,
   VolumeX,
@@ -33,6 +34,7 @@ interface ScreenS2TodayProps {
   onNavigateToPlan: () => void;
   onNavigateToLog: () => void;
   onNavigateToLearn?: () => void;
+  settings?: AppSettings;
 }
 
 export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
@@ -45,6 +47,7 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
   onNavigateToPlan,
   onNavigateToLog,
   onNavigateToLearn,
+  settings,
 }) => {
   const { t, speakText, isSpeaking, stopSpeaking } = useTranslation();
   const [isCoolSpotsOpen, setIsCoolSpotsOpen] = useState(false);
@@ -83,7 +86,7 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
     const alertText = t('s2.whatsapp_share_alert', {
       location: locationName,
       wbgt: currentPlan.wbgtC.toFixed(1),
-      band: t(`band.${currentPlan.band}.label`),
+      band: t(`band.${currentPlan.band}.name`),
     });
 
     if (typeof navigator !== 'undefined' && navigator.share) {
@@ -94,16 +97,22 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
         });
         return;
       } catch {
-        // Fallback to WhatsApp URI scheme
+        // Fallback to clipboard + WhatsApp URI scheme
+      }
+    }
+
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(alertText);
+      } catch {
+        // ignore clipboard permission errors
       }
     }
 
     try {
       window.open(`whatsapp://send?text=${encodeURIComponent(alertText)}`, '_blank');
     } catch {
-      if (typeof navigator !== 'undefined' && navigator.clipboard) {
-        await navigator.clipboard.writeText(alertText);
-      }
+      // ignore if scheme unsupported
     }
   };
 
@@ -400,6 +409,7 @@ export const ScreenS2Today: React.FC<ScreenS2TodayProps> = ({
         onClose={() => setIsHeatPauseOpen(false)}
         currentPlan={currentPlan}
         onNavigateToLearn={onNavigateToLearn}
+        settings={settings}
       />
 
       <CustomerShareModal

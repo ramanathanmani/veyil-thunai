@@ -178,9 +178,13 @@ export async function recordHeatPause(params?: {
   lon?: number;
   wbgtC?: number;
   band?: Band;
+  preset?: string;
+  workload?: WorkloadClass;
+  workerState?: WorkerState;
+  dataQuality?: 'forecast' | 'sample' | 'fallback_simple';
 }): Promise<LogEntry> {
   const active = await getActiveShift();
-  const pauseNote = params?.note || 'Heat distress emergency pause — rested in shade.';
+  const pauseNote = params?.note ?? 'Heat distress emergency pause — rested in shade.';
 
   if (active) {
     const now = new Date();
@@ -206,14 +210,14 @@ export async function recordHeatPause(params?: {
 
   // If no active shift, start and immediately end a standalone pause record
   const started = await startShift({
-    preset: 'custom',
-    workload: 'moderate',
-    workerState: 'acclimatised',
-    lat: params?.lat || 13.08,
-    lon: params?.lon || 80.27,
-    wbgtC: params?.wbgtC || 32.0,
-    band: params?.band || 'orange',
-    dataQuality: 'forecast',
+    preset: params?.preset ?? 'custom',
+    workload: params?.workload ?? 'moderate',
+    workerState: params?.workerState ?? 'acclimatised',
+    lat: params?.lat ?? 13.08,
+    lon: params?.lon ?? 80.27,
+    wbgtC: params?.wbgtC ?? 32.0,
+    band: params?.band ?? 'orange',
+    dataQuality: params?.dataQuality ?? 'forecast',
   });
 
   return endShift({

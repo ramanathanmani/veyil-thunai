@@ -48,11 +48,16 @@ const memoryStore: Record<string, any> = {};
 
 /**
  * Saves forecast to IndexedDB cache with timestamp.
+ * Keys both by exact coordinates and 'last_forecast' for fallback parity.
  */
 export async function saveForecastCache(forecast: CachedForecast): Promise<void> {
+  const coordKey = `forecast_${forecast.lat.toFixed(2)}_${forecast.lon.toFixed(2)}`;
+  memoryStore[coordKey] = forecast;
   memoryStore['last_forecast'] = forecast;
+
   await withDbTimeout(
     async (db) => {
+      await db.put(STORE_FORECAST, forecast, coordKey);
       await db.put(STORE_FORECAST, forecast, 'last_forecast');
     },
     undefined,
@@ -61,12 +66,22 @@ export async function saveForecastCache(forecast: CachedForecast): Promise<void>
 }
 
 /**
- * Retrieves the last cached forecast from IndexedDB.
+ * Retrieves the cached forecast from IndexedDB.
+ * Checks coordinate-specific cache first if coordinates provided, falling back to last_forecast.
  */
-export async function getForecastCache(): Promise<CachedForecast | null> {
-  const fallback = memoryStore['last_forecast'] || null;
+export async function getForecastCache(lat?: number, lon?: number): Promise<CachedForecast | null> {
+  const coordKey =
+    lat !== undefined && lon !== undefined
+      ? `forecast_${lat.toFixed(2)}_${lon.toFixed(2)}`
+      : 'last_forecast';
+  const fallback = memoryStore[coordKey] || memoryStore['last_forecast'] || null;
+
   return withDbTimeout(
     async (db) => {
+      if (lat !== undefined && lon !== undefined) {
+        const byCoord = await db.get(STORE_FORECAST, coordKey);
+        if (byCoord) return byCoord;
+      }
       const cached = await db.get(STORE_FORECAST, 'last_forecast');
       return cached || fallback;
     },

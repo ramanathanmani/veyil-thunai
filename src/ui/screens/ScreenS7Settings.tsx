@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { Language } from '../../i18n/keys';
-import { TAMIL_NADU_CITIES } from '../../data/locations';
+import { TAMIL_NADU_CITIES, NATIONAL_HEAT_CITIES, ALL_CITIES } from '../../data/locations';
 import { AppSettings } from '../../data/cache';
+import { WorkloadClass } from '../../engine/limits';
+import presetsData from '../../../config/presets.json';
 import {
   MapPin,
   Globe,
@@ -12,6 +14,7 @@ import {
   CloudSun,
   Navigation,
   Info,
+  Briefcase,
 } from 'lucide-react';
 import { MedicalDisclaimerNote } from '../components/PrototypeBanner';
 
@@ -33,7 +36,7 @@ export const ScreenS7Settings: React.FC<ScreenS7SettingsProps> = ({
   const [isLocating, setIsLocating] = useState<boolean>(false);
 
   const handleCityChange = (cityId: string) => {
-    const city = TAMIL_NADU_CITIES.find((c) => c.id === cityId);
+    const city = ALL_CITIES.find((c) => c.id === cityId);
     if (city) {
       onUpdateSettings({
         locationId: city.id,
@@ -76,7 +79,7 @@ export const ScreenS7Settings: React.FC<ScreenS7SettingsProps> = ({
           {t('s7.title')}
         </h1>
         <p className="text-xs text-stone-600">
-          Configure offline city, language, and high-contrast settings.
+          {t('s7.subtitle')}
         </p>
       </header>
 
@@ -95,11 +98,25 @@ export const ScreenS7Settings: React.FC<ScreenS7SettingsProps> = ({
             onChange={(e) => handleCityChange(e.target.value)}
             className="w-full min-h-[48px] px-3 rounded-xl border border-stone-300 text-sm font-medium bg-white focus:ring-2 focus:ring-orange-500"
           >
-            {TAMIL_NADU_CITIES.map((c) => (
-              <option key={c.id} value={c.id}>
-                {language === 'ta' ? c.nameTa : language === 'hi' ? c.nameHi : c.nameEn} ({c.lat}N, {c.lon}E)
+            {settings.locationId === 'current_gps' && (
+              <option value="current_gps">
+                GPS ({settings.lat}°N, {settings.lon}°E)
               </option>
-            ))}
+            )}
+            <optgroup label={t('s7.group_tamil_nadu')}>
+              {TAMIL_NADU_CITIES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {language === 'ta' ? c.nameTa : language === 'hi' ? c.nameHi : c.nameEn} ({c.lat}°N, {c.lon}°E)
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label={t('s7.group_pan_india')}>
+              {NATIONAL_HEAT_CITIES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {language === 'ta' ? c.nameTa : language === 'hi' ? c.nameHi : c.nameEn} ({c.lat}°N, {c.lon}°E)
+                </option>
+              ))}
+            </optgroup>
           </select>
 
           <button
@@ -113,6 +130,68 @@ export const ScreenS7Settings: React.FC<ScreenS7SettingsProps> = ({
           </button>
 
           {geoError && <p className="text-[11px] text-rose-600 font-medium">{geoError}</p>}
+        </div>
+      </section>
+
+      {/* Work Type & Intensity Section */}
+      <section aria-labelledby="work-setting-heading" className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm space-y-3">
+        <h2 id="work-setting-heading" className="text-xs font-bold uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
+          <Briefcase className="w-4 h-4 text-orange-600" aria-hidden="true" />
+          {t('s7.work_type_label')}
+        </h2>
+
+        <div className="space-y-3">
+          <div>
+            <select
+              id="work-type-select"
+              aria-label={t('s7.work_type_label')}
+              value={settings.presetId}
+              onChange={(e) => {
+                const selected = presetsData.presets.find((p) => p.id === e.target.value);
+                if (selected) {
+                  onUpdateSettings({
+                    presetId: selected.id,
+                    workload: selected.defaultWorkload as WorkloadClass,
+                  });
+                }
+              }}
+              className="w-full min-h-[48px] px-3 rounded-xl border border-stone-300 text-sm font-medium bg-white focus:ring-2 focus:ring-orange-500"
+            >
+              {presetsData.presets.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {t(p.nameKey)} ({t(`workload.${p.defaultWorkload}`)})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {settings.presetId === 'custom' && (
+            <div>
+              <span className="text-xs font-semibold text-stone-700 block mb-1.5">
+                {t('s7.workload_label')}
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                {(['light', 'moderate', 'heavy', 'very_heavy'] as WorkloadClass[]).map((wl) => {
+                  const isSelected = settings.workload === wl;
+                  return (
+                    <button
+                      key={wl}
+                      type="button"
+                      onClick={() => onUpdateSettings({ workload: wl })}
+                      className={`min-h-[48px] px-3 py-2 rounded-xl border-2 text-xs font-semibold text-center transition-all ${
+                        isSelected
+                          ? 'border-orange-500 bg-orange-50 text-orange-950 font-bold shadow-xs'
+                          : 'border-stone-200 bg-white text-stone-800 hover:border-stone-300'
+                      }`}
+                      aria-pressed={isSelected}
+                    >
+                      {t(`workload.${wl}`)}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -181,7 +260,7 @@ export const ScreenS7Settings: React.FC<ScreenS7SettingsProps> = ({
       <section aria-labelledby="display-setting-heading" className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm space-y-3">
         <h2 id="display-setting-heading" className="text-xs font-bold uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
           <Eye className="w-4 h-4 text-orange-600" aria-hidden="true" />
-          Display & Readability
+          {t('s7.display_heading')}
         </h2>
 
         <div className="space-y-3">
@@ -205,7 +284,11 @@ export const ScreenS7Settings: React.FC<ScreenS7SettingsProps> = ({
               {t('s7.text_size_label')}
             </span>
             <div className="grid grid-cols-3 gap-2">
-              {(['normal', 'large', 'extra_large'] as const).map((sz) => (
+              {([
+                { sz: 'normal', labelKey: 's7.size_normal' },
+                { sz: 'large', labelKey: 's7.size_large' },
+                { sz: 'extra_large', labelKey: 's7.size_extra_large' },
+              ] as const).map(({ sz, labelKey }) => (
                 <button
                   key={sz}
                   type="button"
@@ -216,7 +299,7 @@ export const ScreenS7Settings: React.FC<ScreenS7SettingsProps> = ({
                       : 'border-stone-200 text-stone-700'
                   }`}
                 >
-                  {sz.replace('_', ' ')}
+                  {t(labelKey)}
                 </button>
               ))}
             </div>
@@ -231,9 +314,9 @@ export const ScreenS7Settings: React.FC<ScreenS7SettingsProps> = ({
           {t('s7.forecast_status')}
         </h2>
         <div className="space-y-1 text-stone-700">
-          <p><span className="font-semibold">Source:</span> {sourceLabel}</p>
-          <p><span className="font-semibold">Data Age:</span> {ageFormatted}</p>
-          <p><span className="font-semibold">Attribution:</span> Weather data courtesy of Open-Meteo API (non-commercial tier).</p>
+          <p><span className="font-semibold">{t('s7.source_label')}:</span> {sourceLabel}</p>
+          <p><span className="font-semibold">{t('s7.data_age_label')}:</span> {ageFormatted}</p>
+          <p><span className="font-semibold">{t('s7.attribution_label')}:</span> {t('s7.attribution_text')}</p>
         </div>
       </section>
 
@@ -241,7 +324,7 @@ export const ScreenS7Settings: React.FC<ScreenS7SettingsProps> = ({
       <section aria-labelledby="about-heading" className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm space-y-3 text-xs text-stone-700">
         <h2 id="about-heading" className="font-bold text-stone-900 flex items-center gap-1.5">
           <Info className="w-4 h-4 text-orange-600" aria-hidden="true" />
-          About & Safety Disclaimers
+          {t('s7.about_heading')}
         </h2>
         <div className="space-y-2 text-[11px] leading-relaxed">
           <p>
@@ -251,7 +334,7 @@ export const ScreenS7Settings: React.FC<ScreenS7SettingsProps> = ({
             <span className="font-semibold text-stone-900">Clothing / PPE:</span> {t('app.clothing_disclaimer')}
           </p>
           <p>
-            <span className="font-semibold text-stone-900">Privacy:</span> Local-first. No accounts, no cookies, no tracking. Shift records stay on your device.
+            <span className="font-semibold text-stone-900">{t('s7.privacy_label')}:</span> {t('s7.privacy_text')}
           </p>
         </div>
         <MedicalDisclaimerNote />

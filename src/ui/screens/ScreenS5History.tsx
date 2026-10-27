@@ -91,7 +91,7 @@ export const ScreenS5History: React.FC = () => {
           {t('s5.title')}
         </h1>
         <p className="text-xs text-stone-600">
-          Worker-owned tamper-evident history stored on your device only.
+          {t('s5.subtitle')}
         </p>
       </header>
 
@@ -103,7 +103,7 @@ export const ScreenS5History: React.FC = () => {
             <div>
               <p className="font-bold text-emerald-900">{t('s5.badge_verified')}</p>
               <p className="text-[11px] text-emerald-700 font-normal">
-                All {entries.length} shift hashes match cryptographic SHA-256 chain links.
+                {t('s5.hashes_match', { count: entries.length })}
               </p>
             </div>
           </div>
@@ -113,7 +113,7 @@ export const ScreenS5History: React.FC = () => {
             <div>
               <p className="font-bold text-rose-900">{t('s5.badge_broken')}</p>
               <p className="text-[11px] text-rose-700 font-normal">
-                Discontinuity detected starting at record #{chainStatus + 1}.
+                {t('s5.discontinuity', { index: chainStatus + 1 })}
               </p>
             </div>
           </div>
@@ -177,7 +177,7 @@ export const ScreenS5History: React.FC = () => {
       {/* Entry List */}
       <section aria-label="List of logged work shifts" className="space-y-2.5">
         <h2 className="text-xs uppercase font-bold text-stone-700 tracking-wider">
-          Recorded Shifts ({entries.length})
+          {t('s5.recorded_shifts', { count: entries.length })}
         </h2>
 
         {entries.length === 0 ? (
@@ -197,20 +197,23 @@ export const ScreenS5History: React.FC = () => {
                       weekday: 'short',
                       month: 'short',
                       day: 'numeric',
+                      timeZone: 'Asia/Kolkata',
                     })}
                   </span>
                   <span className="text-[11px] text-stone-700">
                     {new Date(entry.startedAt).toLocaleTimeString([], {
                       hour: '2-digit',
                       minute: '2-digit',
+                      timeZone: 'Asia/Kolkata',
                     })}{' '}
                     -{' '}
                     {entry.endedAt
                       ? new Date(entry.endedAt).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit',
+                          timeZone: 'Asia/Kolkata',
                         })
-                      : 'Active'}
+                      : t('s5.active_shift')}
                   </span>
                 </div>
 
@@ -219,28 +222,28 @@ export const ScreenS5History: React.FC = () => {
                     WBGT {entry.forecastAtStart.wbgtC}°C
                   </span>
                   <span className="text-[10px] uppercase font-semibold text-stone-700">
-                    {entry.forecastAtStart.band} band
+                    {t(`band.${entry.forecastAtStart.band}.name`)}
                   </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-[11px] bg-stone-50 p-2 rounded-lg text-stone-700">
                 <div>
-                  <span className="text-stone-700 block">Work Type</span>
+                  <span className="text-stone-700 block">{t('s5.work_type')}</span>
                   <span className="font-semibold text-stone-800">{entry.preset}</span>
                 </div>
                 <div>
-                  <span className="text-stone-700 block">Rest Breaks</span>
+                  <span className="text-stone-700 block">{t('s5.rest_breaks')}</span>
                   <span className="font-semibold text-stone-800">
-                    {entry.restBreaks.length} break(s)
+                    {t('s5.breaks_count', { count: entry.restBreaks.length })}
                   </span>
                 </div>
               </div>
 
               {entry.incentivePressure !== null && (
                 <p className="text-[11px] text-stone-600">
-                  <span className="font-semibold">Pressure felt:</span>{' '}
-                  {entry.incentivePressure ? 'Yes, pushed to work' : 'No'}
+                  <span className="font-semibold">{t('s5.pressure_felt')}</span>{' '}
+                  {entry.incentivePressure ? t('s5.pressure_yes') : t('s5.pressure_no')}
                 </p>
               )}
 
@@ -282,14 +285,14 @@ export const ScreenS5History: React.FC = () => {
                   {t('s5.union_summary_title')}
                 </h2>
                 <p className="text-xs text-stone-600">
-                  7-Day worker collective representation rollup
+                  {t('s5.union_rollup')}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsUnionModalOpen(false)}
                 className="p-2 text-stone-400 hover:text-stone-700 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-lg"
-                aria-label="Close"
+                aria-label={t('s5.close')}
               >
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
@@ -307,7 +310,7 @@ export const ScreenS5History: React.FC = () => {
                 {t('s5.union_pressure_count', { count: weeklyPressureCount })}
               </p>
               <div className="pt-1.5 border-t border-stone-200 text-[11px] text-stone-600">
-                Chain integrity: {chainStatus === -1 ? 'Verified Intact' : 'Discontinuity detected'}
+                {t('s5.chain_integrity')}: {chainStatus === -1 ? t('s5.integrity_intact') : t('s5.integrity_broken')}
               </div>
             </div>
 
@@ -323,14 +326,14 @@ export const ScreenS5History: React.FC = () => {
                 className="w-full min-h-[48px] bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-xs transition-colors"
               >
                 <Printer className="w-4 h-4" aria-hidden="true" />
-                <span>Print Weekly Exposure Page</span>
+                <span>{t('s5.print_weekly')}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setIsUnionModalOpen(false)}
                 className="w-full min-h-[48px] bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold text-xs rounded-xl flex items-center justify-center transition-colors"
               >
-                Close
+                {t('s5.close')}
               </button>
             </div>
           </div>
